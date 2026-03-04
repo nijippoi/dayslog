@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-label="app-name">Days Log</title>
+    <meta name="theme-color" content="#3E8ED0" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="favicon_180x180.png" />
+    <link rel="manifest" href="index.webmanifest" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <svg style="display: none">
+      <!-- Material Symbols by Google - https://github.com/google/material-design-icons License - https://github.com/google/material-design-icons/blob/master/LICENSE Copyright 2020 Google LLC -->
+      <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+      <defs>
+        <symbol id="svg-add" viewBox="0 -960 960 960">
+          <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+        </symbol>
+        <symbol id="svg-add-circle" viewBox="0 -960 960 960">
+          <path
+            d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+          />
+        </symbol>
+        <symbol id="svg-close" viewBox="0 -960 960 960">
+          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+        </symbol>
+        <symbol id="svg-cancel" viewBox="0 -960 960 960">
+          <path
+            d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+          />
+        </symbol>
+        <symbol id="svg-remove" viewBox="0 -960 960 960">
+          <path d="M200-440v-80h560v80H200Z" />
+        </symbol>
+        <symbol id="svg-archive" viewBox="0 -960 960 960">
+          <path
+            d="m480-240 160-160-56-56-64 64v-168h-80v168l-64-64-56 56 160 160ZM200-640v440h560v-440H200Zm0 520q-33 0-56.5-23.5T120-200v-499q0-14 4.5-27t13.5-24l50-61q11-14 27.5-21.5T250-840h460q18 0 34.5 7.5T772-811l50 61q9 11 13.5 24t4.5 27v499q0 33-23.5 56.5T760-120H200Zm16-600h528l-34-40H250l-34 40Zm264 300Z"
+          />
+        </symbol>
+        <symbol id="svg-undo" viewBox="0 -960 960 960">
+          <path
+            d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"
+          />
+        </symbol>
+        <symbol id="svg-delete" viewBox="0 -960 960 960">
+          <path
+            d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
+          />
+        </symbol>
+        <symbol id="svg-bookmark-add" viewBox="0 -960 960 960">
+          <path
+            d="M200-120v-640q0-33 23.5-56.5T280-840h240v80H280v518l200-86 200 86v-278h80v400L480-240 200-120Zm80-640h240-240Zm400 160v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"
+          />
+        </symbol>
+        <symbol id="svg-bookmark-remove" viewBox="0 -960 960 960">
+          <path
+            d="M840-680H600v-80h240v80ZM200-120v-640q0-33 23.5-56.5T280-840h240v80H280v518l200-86 200 86v-278h80v400L480-240 200-120Zm80-640h240-240Z"
+          />
+        </symbol>
+        <symbol id="svg-share" viewBox="0 -960 960 960">
+          <path
+            d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm508.5-291.5Q720-743 720-760t-11.5-28.5Q697-800 680-800t-28.5 11.5Q640-777 640-760t11.5 28.5Q663-720 680-720t28.5-11.5ZM680-200ZM200-480Zm480-280Z"
+          />
+        </symbol>
+        <symbol id="svg-content-copy" viewBox="0 -960 960 960">
+          <path
+            d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"
+          />
+        </symbol>
+        <symbol id="svg-swap-horiz" viewBox="0 -960 960 960">
+          <path
+            d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"
+          />
+        </symbol>
+        <symbol id="svg-home" viewBox="0 -960 960 960">
+          <path
+            d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
+          />
+        </symbol>
+        <symbol id="svg-site-x" viewBox="0 0 640 640">
+          <path
+            d="M453.2 112L523.8 112L369.6 288.2L551 528L409 528L297.7 382.6L170.5 528L99.8 528L264.7 339.5L90.8 112L236.4 112L336.9 244.9L453.2 112zM428.4 485.8L467.5 485.8L215.1 152L173.1 152L428.4 485.8z"
+          />
+        </symbol>
+        <symbol id="svg-site-github" viewBox="0 0 640 640">
+          <path
+            d="M237.9 461.4C237.9 463.4 235.6 465 232.7 465C229.4 465.3 227.1 463.7 227.1 461.4C227.1 459.4 229.4 457.8 232.3 457.8C235.3 457.5 237.9 459.1 237.9 461.4zM206.8 456.9C206.1 458.9 208.1 461.2 211.1 461.8C213.7 462.8 216.7 461.8 217.3 459.8C217.9 457.8 216 455.5 213 454.6C210.4 453.9 207.5 454.9 206.8 456.9zM251 455.2C248.1 455.9 246.1 457.8 246.4 460.1C246.7 462.1 249.3 463.4 252.3 462.7C255.2 462 257.2 460.1 256.9 458.1C256.6 456.2 253.9 454.9 251 455.2zM316.8 72C178.1 72 72 177.3 72 316C72 426.9 141.8 521.8 241.5 555.2C254.3 557.5 258.8 549.6 258.8 543.1C258.8 536.9 258.5 502.7 258.5 481.7C258.5 481.7 188.5 496.7 173.8 451.9C173.8 451.9 162.4 422.8 146 415.3C146 415.3 123.1 399.6 147.6 399.9C147.6 399.9 172.5 401.9 186.2 425.7C208.1 464.3 244.8 453.2 259.1 446.6C261.4 430.6 267.9 419.5 275.1 412.9C219.2 406.7 162.8 398.6 162.8 302.4C162.8 274.9 170.4 261.1 186.4 243.5C183.8 237 175.3 210.2 189 175.6C209.9 169.1 258 202.6 258 202.6C278 197 299.5 194.1 320.8 194.1C342.1 194.1 363.6 197 383.6 202.6C383.6 202.6 431.7 169 452.6 175.6C466.3 210.3 457.8 237 455.2 243.5C471.2 261.2 481 275 481 302.4C481 398.9 422.1 406.6 366.2 412.9C375.4 420.8 383.2 435.8 383.2 459.3C383.2 493 382.9 534.7 382.9 542.9C382.9 549.4 387.5 557.3 400.2 555C500.2 521.8 568 426.9 568 316C568 177.3 455.5 72 316.8 72zM169.2 416.9C167.9 417.9 168.2 420.2 169.9 422.1C171.5 423.7 173.8 424.4 175.1 423.1C176.4 422.1 176.1 419.8 174.4 417.9C172.8 416.3 170.5 415.6 169.2 416.9zM158.4 408.8C157.7 410.1 158.7 411.7 160.7 412.7C162.3 413.7 164.3 413.4 165 412C165.7 410.7 164.7 409.1 162.7 408.1C160.7 407.5 159.1 407.8 158.4 408.8zM190.8 444.4C189.2 445.7 189.8 448.7 192.1 450.6C194.4 452.9 197.3 453.2 198.6 451.6C199.9 450.3 199.3 447.3 197.3 445.4C195.1 443.1 192.1 442.8 190.8 444.4zM179.4 429.7C177.8 430.7 177.8 433.3 179.4 435.6C181 437.9 183.7 438.9 185 437.9C186.6 436.6 186.6 434 185 431.7C183.6 429.4 181 428.4 179.4 429.7z"
+          />
+        </symbol>
+      </defs>
+    </svg>
+    <div id="header-tile" class="tile">
+      <h1 id="header-app-name" data-label="app-name"></h1>
+    </div>
+    <div id="summary-tile" class="tile">
+      <div><span id="summary-title"></span> から</div>
+      <div><span id="summary-days"></span> 日</div>
+    </div>
+    <div id="input-tile" class="tile">
+      <input id="input-style" type="hidden" value="" />
+      <div class="form-control">
+        <div class="label">
+          <label for="input-date" data-label="date"></label>
+          <svg class="label-icon svg-icon" onclick="document.getElementById('input-date').value = ''">
+            <use href="#svg-undo"></use></svg
+          ><path
+            d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"
+          />
+        </div>
+        <input id="input-date" type="date" onchange="renderSummary()" />
+      </div>
+      <div class="form-control">
+        <button onclick="swapDates()">
+          <svg class="svg-icon">
+            <use href="#svg-swap-horiz"></use>
+          </svg>
+        </button>
+      </div>
+      <div class="form-control">
+        <div class="label">
+          <label for="input-target" data-label="target"></label>
+          <svg class="svg-icon" onclick="document.getElementById('input-target').value = ''">
+            <use href="#svg-undo"></use>
+          </svg>
+        </div>
+        <input id="input-target" type="date" onchange="renderSummary()" />
+      </div>
+      <div class="form-control">
+        <div class="label">
+          <label for="input-title" data-label="title"></label>
+          <svg class="svg-icon" onclick="document.getElementById('input-title').value = ''">
+            <use href="#svg-undo"></use>
+          </svg>
+        </div>
+        <input id="input-title" type="text" data-label-placeholder="title" onchange="renderSummary()" />
+      </div>
+      <div class="form-control">
+        <div class="label">
+          <label for="input-btn-share-to-x" data-label="share"></label>
+        </div>
+        <button id="input-btn-share-to-x" onclick="shareToX()">
+          <svg class="svg-icon">
+            <use href="#svg-site-x"></use>
+          </svg>
+        </button>
+      </div>
+      <div class="form-control">
+        <div class="label">
+          <label for="input-btn-copy-url" data-label="copy-url"></label>
+        </div>
+        <button id="input-btn-copy-url" onclick="copyUrl()">
+          <svg class="svg-icon">
+            <use href="#svg-content-copy"></use>
+          </svg>
+        </button>
+      </div>
+      <div class="form-control">
+        <div class="label">
+          <label for="input-btn-save" data-label="save"></label>
+        </div>
+        <button id="input-btn-save" onclick="saveInput()">
+          <svg class="svg-icon">
+            <use href="#svg-bookmark-add"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="dates-tile" class="tile">
+      <h3 data-label="dates-log"></h3>
+      <ul id="dates"></ul>
+    </div>
+    <div id="footer-tile" class="tile">
+      <div>
+        <a href="https://github.com/nijippoi" target="_blank">&copy;nijippoi</a>
+        |
+        <a href="https://github.com/nijippoi/dayslog" target="_blank">
+          <svg class="svg-icon"><use href="#svg-site-github"></use></svg>Github
+        </a>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
