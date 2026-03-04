@@ -40,13 +40,25 @@ const LABELS = {
     en: '📅 #{app} {title}\n{days} days since {date} until {target}',
     ja: '📅 #{app} {title}\n{date}から{target}まで{days}日が経ちました',
   },
+  'share-to-x-future-message': {
+    en: '📅 #{app} {title}\n{days} days to go since {target} until {date}',
+    ja: '📅 #{app} {title}\n{target}から{date}まで{days}日が残っています',
+  },
   'summary-range-message': {
     en: 'From <span class="summary-range-date">{date}</span> to <span class="summary-range-date">{target}</span>',
     ja: '<span class="summary-range-date">{date}</span> から <span class="summary-range-date">{target}</span> まで',
   },
+  'summary-range-future-message': {
+    en: 'From <span class="summary-range-date">{target}</span> to <span class="summary-range-date">{date}</span>',
+    ja: '<span class="summary-range-date">{target}</span> から <span class="summary-range-date">{date}</span> まで',
+  },
   'summary-days-message': {
     en: '<span class="summary-days-number">{days}</span> days<br/>has passed',
     ja: '<span class="summary-days-number">{days}</span> 日<br/>が経ちました',
+  },
+  'summary-days-future-message': {
+    en: '<span class="summary-days-number">{days}</span> days<br/>to go',
+    ja: '<span class="summary-days-number">{days}</span> 日<br/>が残っています',
   },
   date: {
     en: 'Date',
@@ -222,7 +234,15 @@ function shareToX(data) {
   const app = label('app-name');
   const dateStr = formatDate(date);
   const targetStr = target ? formatDate(target) : formatDate(Temporal.Now.plainDateISO().toString());
-  const text = label('share-to-x-message', { app, title, date: dateStr, target: targetStr, days, url });
+  const text = label(days < 0 ? 'share-to-x-future-message' : 'share-to-x-message', {
+    app,
+    title,
+    date: dateStr,
+    target: targetStr,
+    days: Math.abs(days),
+    style,
+    url,
+  });
   const intentUrl = new URL('https://x.com/intent/tweet');
   intentUrl.searchParams.set('text', text);
   intentUrl.searchParams.set('url', url.toString());
@@ -266,12 +286,17 @@ function renderSummary() {
   const target = id(ELEM_INPUT_TARGET).value || DEFAULT_TARGET;
   if (date) {
     id(ELEM_SUMMARY_TITLE).textContent = title || '';
+    const days = calculateDays(date, target);
     const dateStr = formatDate(date);
     const targetStr = target ? formatDate(target) : formatToday();
-    const rangeMessage = label('summary-range-message', { date: dateStr, target: targetStr });
+    const rangeMessage = label(days < 0 ? 'summary-range-future-message' : 'summary-range-message', {
+      date: dateStr,
+      target: targetStr,
+    });
     id(ELEM_SUMMARY_RANGE).innerHTML = rangeMessage;
-    const days = calculateDays(date, target);
-    const daysMessage = label('summary-days-message', { days });
+    const daysMessage = label(days < 0 ? 'summary-days-future-message' : 'summary-days-message', {
+      days: Math.abs(days),
+    });
     id(ELEM_SUMMARY_DAYS).innerHTML = days !== null ? daysMessage : '';
     id(ELEM_SUMMARY_TILE).classList.remove('hidden');
   } else {
