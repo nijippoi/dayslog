@@ -400,3 +400,4 @@ function load() {
 }
 
 document.addEventListener('DOMContentLoaded', load);
+window.addEventListener('hashchange', load);
