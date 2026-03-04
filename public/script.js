@@ -322,8 +322,10 @@ function renderDates() {
             </div>
         `;
     li.querySelector('.select-btn').addEventListener('click', () => {
-      id(ELEM_INPUT_TITLE).value = date.title;
-      id(ELEM_INPUT_DATE).value = date.date;
+      id(ELEM_INPUT_TITLE).value = date.title || DEFAULT_TITLE;
+      id(ELEM_INPUT_DATE).value = date.date || DEFAULT_DATE;
+      id(ELEM_INPUT_TARGET).value = date.target || DEFAULT_TARGET;
+      id(ELEM_INPUT_STYLE).value = date.style || DEFAULT_STYLE;
       renderSummary();
     });
     li.querySelector('.delete-btn').addEventListener('click', () => {
