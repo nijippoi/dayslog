@@ -15,6 +15,11 @@
       <!-- Material Symbols by Google - https://github.com/google/material-design-icons License - https://github.com/google/material-design-icons/blob/master/LICENSE Copyright 2020 Google LLC -->
       <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
       <defs>
+        <symbol id="svg-favicon" viewBox="0 -960 960 960" fill="#8B7DBE">
+          <path
+            d="m389-400 91-55 91 55-24-104 80-69-105-9-42-98-42 98-105 9 80 69-24 104ZM200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"
+          />
+        </symbol>
         <symbol id="svg-add" viewBox="0 -960 960 960">
           <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
         </symbol>
@@ -47,6 +52,11 @@
         <symbol id="svg-delete" viewBox="0 -960 960 960">
           <path
             d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
+          />
+        </symbol>
+        <symbol id="svg-upload" viewBox="0 -960 960 960">
+          <path
+            d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"
           />
         </symbol>
         <symbol id="svg-bookmark-add" viewBox="0 -960 960 960">
@@ -92,22 +102,34 @@
       </defs>
     </svg>
     <div id="header-tile" class="tile">
-      <h1 id="header-app-name" data-label="app-name"></h1>
+      <h1>
+        <svg class="svg-icon">
+          <use href="#svg-favicon"></use>
+        </svg>
+        <span id="header-app-name" data-label="app-name"></span>
+      </h1>
     </div>
     <div id="summary-tile" class="tile">
-      <div><span id="summary-title"></span> から</div>
-      <div><span id="summary-days"></span> 日</div>
+      <div id="summary-title"></div>
+      <div id="summary-range"></div>
+      <div id="summary-days"></div>
     </div>
     <div id="input-tile" class="tile">
       <input id="input-style" type="hidden" value="" />
       <div class="form-control">
         <div class="label">
           <label for="input-date" data-label="date"></label>
-          <svg class="label-icon svg-icon" onclick="document.getElementById('input-date').value = ''">
-            <use href="#svg-undo"></use></svg
-          ><path
-            d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"
-          />
+          <span>
+            <svg
+              class="label-icon svg-icon"
+              onclick="
+                document.getElementById('input-date').value = '';
+                renderSummary();
+              "
+            >
+              <use href="#svg-undo"></use>
+            </svg>
+          </span>
         </div>
         <input id="input-date" type="date" onchange="renderSummary()" />
       </div>
@@ -121,18 +143,34 @@
       <div class="form-control">
         <div class="label">
           <label for="input-target" data-label="target"></label>
-          <svg class="svg-icon" onclick="document.getElementById('input-target').value = ''">
-            <use href="#svg-undo"></use>
-          </svg>
+          <span>
+            <svg
+              class="svg-icon"
+              onclick="
+                document.getElementById('input-target').value = '';
+                renderSummary();
+              "
+            >
+              <use href="#svg-undo"></use>
+            </svg>
+          </span>
         </div>
         <input id="input-target" type="date" onchange="renderSummary()" />
       </div>
       <div class="form-control">
         <div class="label">
           <label for="input-title" data-label="title"></label>
-          <svg class="svg-icon" onclick="document.getElementById('input-title').value = ''">
-            <use href="#svg-undo"></use>
-          </svg>
+          <span>
+            <svg
+              class="svg-icon"
+              onclick="
+                document.getElementById('input-title').value = '';
+                renderSummary();
+              "
+            >
+              <use href="#svg-undo"></use>
+            </svg>
+          </span>
         </div>
         <input id="input-title" type="text" data-label-placeholder="title" onchange="renderSummary()" />
       </div>

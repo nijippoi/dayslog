@@ -13,7 +13,9 @@ const ELEM_INPUT_DATE = 'input-date';
 const ELEM_INPUT_TARGET = 'input-target';
 const ELEM_INPUT_DURATION = 'input-duration';
 const ELEM_INPUT_STYLE = 'input-style';
+const ELEM_SUMMARY_TILE = 'summary-tile';
 const ELEM_SUMMARY_TITLE = 'summary-title';
+const ELEM_SUMMARY_RANGE = 'summary-range';
 const ELEM_SUMMARY_DAYS = 'summary-days';
 const ELEM_DATES = 'dates';
 
@@ -36,7 +38,15 @@ const LABELS = {
   },
   'share-to-x-message': {
     en: '📅 #{app} {title}\n{days} days since {date} until {target}',
-    ja: '📅 #{app} {title}\n{date} から {target} まで {days} 日が経ちました',
+    ja: '📅 #{app} {title}\n{date}から{target}まで{days}日が経ちました',
+  },
+  'summary-range-message': {
+    en: 'From <span class="summary-range-date">{date}</span> to <span class="summary-range-date">{target}</span>',
+    ja: '<span class="summary-range-date">{date}</span> から <span class="summary-range-date">{target}</span> まで',
+  },
+  'summary-days-message': {
+    en: '<span class="summary-days-number">{days}</span> days<br/>has passed',
+    ja: '<span class="summary-days-number">{days}</span> 日<br/>が経ちました',
   },
   date: {
     en: 'Date',
@@ -63,8 +73,8 @@ const LABELS = {
     ja: '共有',
   },
   'copy-url': {
-    en: 'Copy URL',
-    ja: 'コピー',
+    en: 'URL',
+    ja: 'URL',
   },
   save: {
     en: 'Save',
@@ -74,7 +84,14 @@ const LABELS = {
     en: 'Delete',
     ja: '削除',
   },
+  today: {
+    en: 'Today',
+    ja: '今日',
+  },
 };
+
+const DATE_FORMATTERS = new Map();
+const TODAY_LABELS = new Map();
 
 /**
  * JSON structure for date log.
@@ -170,7 +187,6 @@ function generateUrl(data) {
     title: id(ELEM_INPUT_TITLE).value.trim() || DEFAULT_TITLE,
     style: id(ELEM_INPUT_STYLE).value.trim() || DEFAULT_STYLE,
   };
-  console.log('Generating URL with data:', data, { date, target, title, style });
   const params = new URLSearchParams();
   if (date) {
     params.set(PARAM_DATE, date.replace(/-/g, ''));
@@ -186,21 +202,27 @@ function generateUrl(data) {
   }
   const url = new URL(window.location.href);
   url.hash = `#${params.toString()}`;
-  console.log('Generated URL:', url.toString());
   return url.toString();
 }
 
 function shareToX(data) {
-  const { date, target, title, style } = data || {
-    date: id(ELEM_INPUT_DATE).value || DEFAULT_DATE,
-    target: id(ELEM_INPUT_TARGET).value || DEFAULT_TARGET,
-    title: id(ELEM_INPUT_TITLE).value.trim() || DEFAULT_TITLE,
-    style: id(ELEM_INPUT_STYLE).value.trim() || DEFAULT_STYLE,
+  let { date, target, title, style } = data || {
+    date: id(ELEM_INPUT_DATE).value,
+    target: id(ELEM_INPUT_TARGET).value,
+    title: id(ELEM_INPUT_TITLE).value,
+    style: id(ELEM_INPUT_STYLE).value,
   };
+  date = date || DEFAULT_DATE;
+  if (!date) return;
+  target = target || DEFAULT_TARGET;
+  title = title.trim() || DEFAULT_TITLE;
+  style = style.trim() || DEFAULT_STYLE;
   const days = calculateDays(date, target);
   const url = generateUrl(data);
   const app = label('app-name');
-  const text = label('share-to-x-message', { app, title, date, target, days, url });
+  const dateStr = formatDate(date);
+  const targetStr = target ? formatDate(target) : formatDate(Temporal.Now.plainDateISO().toString());
+  const text = label('share-to-x-message', { app, title, date: dateStr, target: targetStr, days, url });
   const intentUrl = new URL('https://x.com/intent/tweet');
   intentUrl.searchParams.set('text', text);
   intentUrl.searchParams.set('url', url.toString());
@@ -211,16 +233,51 @@ function copyUrl(data) {
   navigator.clipboard.writeText(generateUrl(data));
 }
 
+function formatDate(date) {
+  if (!date) return '';
+  const userLang = getUserLang();
+  if (!DATE_FORMATTERS.has(userLang)) {
+    DATE_FORMATTERS.set(
+      userLang,
+      new Intl.DateTimeFormat(userLang, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+    );
+  }
+  const formatter = DATE_FORMATTERS.get(userLang);
+  // PlainDateの場合は年月日でフォーマットされていない
+  // return formatter.format(Temporal.PlainDate.from(date));
+  return formatter.format(new Date(date));
+}
+
+function formatToday() {
+  const userLang = getUserLang();
+  if (!TODAY_LABELS.has(userLang)) {
+    TODAY_LABELS.set(userLang, new Intl.RelativeTimeFormat(userLang, { numeric: 'auto' }).format(0, 'day'));
+  }
+  return TODAY_LABELS.get(userLang);
+}
+
 function renderSummary() {
   const title = id(ELEM_INPUT_TITLE).value.trim();
   const date = id(ELEM_INPUT_DATE).value || DEFAULT_DATE;
   const target = id(ELEM_INPUT_TARGET).value || DEFAULT_TARGET;
   if (date) {
     id(ELEM_SUMMARY_TITLE).textContent = title || '';
+    const dateStr = formatDate(date);
+    const targetStr = target ? formatDate(target) : formatToday();
+    const rangeMessage = label('summary-range-message', { date: dateStr, target: targetStr });
+    id(ELEM_SUMMARY_RANGE).innerHTML = rangeMessage;
     const days = calculateDays(date, target);
-    id(ELEM_SUMMARY_DAYS).textContent = days !== null ? days : '';
+    const daysMessage = label('summary-days-message', { days });
+    id(ELEM_SUMMARY_DAYS).innerHTML = days !== null ? daysMessage : '';
+    id(ELEM_SUMMARY_TILE).classList.remove('hidden');
   } else {
+    id(ELEM_SUMMARY_TILE).classList.add('hidden');
     id(ELEM_SUMMARY_TITLE).textContent = '';
+    id(ELEM_SUMMARY_RANGE).textContent = '';
     id(ELEM_SUMMARY_DAYS).textContent = '';
   }
 }
@@ -235,13 +292,14 @@ function renderDates() {
             <span>${date.date}</span>
             <span>${date.title}</span>
             <div>
-                <button data-id="${date.id}" class="select-btn"><svg class="svg-icon"><use href="#svg-add"></use></svg></button>
+                <button data-id="${date.id}" class="select-btn"><svg class="svg-icon"><use href="#svg-upload"></use></svg></button>
                 <button data-id="${date.id}" class="delete-btn"><svg class="svg-icon"><use href="#svg-delete"></use></svg></button>
             </div>
         `;
     li.querySelector('.select-btn').addEventListener('click', () => {
       id(ELEM_INPUT_TITLE).value = date.title;
       id(ELEM_INPUT_DATE).value = date.date;
+      renderSummary();
     });
     li.querySelector('.delete-btn').addEventListener('click', () => {
       deleteDate(date.id);
