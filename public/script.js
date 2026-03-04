@@ -314,8 +314,8 @@ function renderDates() {
   dates.forEach((date) => {
     const li = document.createElement('li');
     li.innerHTML = `
-            <span>${date.date}</span>
-            <span>${date.title}</span>
+            <span>${date.date ? formatDate(date.date) : DEFAULT_DATE}${date.target ? ' - ' : ''}${date.target ? formatDate(date.target) : DEFAULT_TARGET}</span>
+            <span>${date.title || DEFAULT_TITLE}</span>
             <div>
                 <button data-id="${date.id}" class="select-btn"><svg class="svg-icon"><use href="#svg-upload"></use></svg></button>
                 <button data-id="${date.id}" class="delete-btn"><svg class="svg-icon"><use href="#svg-delete"></use></svg></button>
